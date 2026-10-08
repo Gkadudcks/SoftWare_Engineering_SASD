@@ -221,37 +221,74 @@ RvcState Handle_Power_Up(ObstacleLocation loc, bool dust)
 }
 
 /* ===== Efferent ===== */
+/*
+ * 공통 규칙
+ * [v1 구조] main이 wait_ms(TICK_MS)로 Tick을 만들고 Controller를 Tick마다 1회 호출하므로,
+ *           Efferent 모듈이 한 번 호출되는 것 = 1 Tick 이다.
+ *  - Move Forward / Move Backward : Enable/Disable 제어 신호를 받는다.
+ *      Controller가 유지하고 싶은 Tick마다 SIG_ENABLE로 호출하고,
+ *      SIG_DISABLE이면 명령을 보내지 않는다 -> 모터 정지.
+ *  - Turn Left / Turn Right : Trigger로 시작해서 TURN_TICKS(5) Tick 동안 회전 명령을 보내고
+ *      스스로 정지한다. 회전이 끝난 뒤의 호출(trigger=false)은 아무것도 하지 않는다.
+ *      -> Trigger를 받은 Tick이 1번째 회전 Tick이다.
+ *         Handle_Turn_Left/Right가 Turn_xxx(false)를 부르고 tick_count를 올려서
+ *         tick_count == 5가 되는 Tick에는 회전이 이미 끝나 있으므로,
+ *         그 Tick에 바로 Move_Forward(SIG_ENABLE)를 불러도 겹치지 않는다.
+ */
+
+static int turn_left_remaining  = 0;   /* Turn Left 남은 회전 Tick 수 (0 = 정지 상태) */
+static int turn_right_remaining = 0;   /* Turn Right 남은 회전 Tick 수 (0 = 정지 상태) */
 
 void Move_Forward(EnableSignal sig)
 {
-    /* TODO 2.1.2: Enable을 받는 매 Tick마다 Motor_Interface(MOTOR_FORWARD) 전송
-                   Disable이면 전송 안 함 -> 모터 정지 */
-    (void)sig;
+    /* 2.1.2: Enable인 Tick에만 Motor_Interface(MOTOR_FORWARD) 전송
+              Disable이면 전송 안 함 -> 모터 정지 */
+    if (sig == SIG_ENABLE)
+        Motor_Interface(MOTOR_FORWARD);
 }
 
 void Turn_Left(bool trigger)
 {
-    /* TODO 2.1.3: Trigger 받으면 MOTOR_LEFT 전송, 5 Tick 세고 스스로 정지 */
-    (void)trigger;
+    /* 2.1.3: Trigger 받으면 회전 시작 (이 Tick이 1번째),
+              회전 중인 동안 매 Tick MOTOR_LEFT 전송, TURN_TICKS Tick 후 스스로 정지 */
+    if (trigger) {
+        turn_left_remaining  = TURN_TICKS;
+        turn_right_remaining = 0;          /* 반대 방향 회전이 남아 있었다면 취소 */
+    }
+
+    if (turn_left_remaining > 0) {
+        Motor_Interface(MOTOR_LEFT);
+        turn_left_remaining--;
+    }
 }
 
 void Turn_Right(bool trigger)
 {
-    /* TODO 2.1.4: Trigger 받으면 MOTOR_RIGHT 전송, 5 Tick 세고 스스로 정지 */
-    (void)trigger;
+    /* 2.1.4: Trigger 받으면 회전 시작 (이 Tick이 1번째),
+              회전 중인 동안 매 Tick MOTOR_RIGHT 전송, TURN_TICKS Tick 후 스스로 정지 */
+    if (trigger) {
+        turn_right_remaining = TURN_TICKS;
+        turn_left_remaining  = 0;          /* 반대 방향 회전이 남아 있었다면 취소 */
+    }
+
+    if (turn_right_remaining > 0) {
+        Motor_Interface(MOTOR_RIGHT);
+        turn_right_remaining--;
+    }
 }
 
 void Move_Backward(EnableSignal sig)
 {
-    /* TODO 2.1.5: Enable을 받는 매 Tick마다 Motor_Interface(MOTOR_BACKWARD) 전송
-                   Disable이면 전송 안 함 -> 모터 정지 */
-    (void)sig;
+    /* 2.1.5: Enable인 Tick에만 Motor_Interface(MOTOR_BACKWARD) 전송
+              Disable이면 전송 안 함 -> 모터 정지 */
+    if (sig == SIG_ENABLE)
+        Motor_Interface(MOTOR_BACKWARD);
 }
 
 void Cleaner_Controller(CleanerCommand cmd)
 {
-    /* TODO 2.1.6: Cleaner_Interface(cmd) 호출 */
-    (void)cmd;
+    /* 2.1.6: Controller가 정한 Cleaner Command(On / Off / Power-Up)를 그대로 Cleaner Interface로 전달 */
+    Cleaner_Interface(cmd);
 }
 
 /* ===== 유틸 ===== */
