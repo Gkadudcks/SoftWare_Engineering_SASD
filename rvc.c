@@ -2,40 +2,122 @@
 
 /* ===== Library Modules ===== */
 
+#include <stdio.h>
+#include <stdlib.h>
+
+/* Tick 번호는 0부터 시작한다. 네 센서가 모두 한 번씩 읽으면 다음 Tick으로 이동한다. */
+static unsigned long sensor_tick = 0;
+static unsigned int sensors_read_this_tick = 0;
+
 bool Front_Sensor_Interface(void)
 {
-    /* TODO 1.1: 전방 센서 아날로그 값 읽기 -> True/False 변환 (Interrupt) */
-    return false;
+    FILE *fp = fopen("sensors.txt", "r");
+    int front, left, right, dust;
+
+    for (unsigned long i = 0; i <= sensor_tick; ++i) {
+        if (fscanf(fp, "%d %d %d %d", &front, &left, &right, &dust) == EOF) {
+            fclose(fp);
+            puts("End of sensor data.");
+            exit(EXIT_SUCCESS);
+        }
+    }
+    fclose(fp);
+
+    sensors_read_this_tick |= 1U;
+    if (sensors_read_this_tick == 15U) {
+        ++sensor_tick;
+        sensors_read_this_tick = 0;
+    }
+
+    return front == 1;
 }
 
 bool Left_Sensor_Interface(void)
 {
-    /* TODO 1.2: 좌측 센서 주기적 읽기 -> True/False 변환 */
-    return false;
+    FILE *fp = fopen("sensors.txt", "r");
+    int front, left, right, dust;
+
+    for (unsigned long i = 0; i <= sensor_tick; ++i) {
+        if (fscanf(fp, "%d %d %d %d", &front, &left, &right, &dust) == EOF) {
+            fclose(fp);
+            puts("End of sensor data.");
+            exit(EXIT_SUCCESS);
+        }
+    }
+    fclose(fp);
+
+    sensors_read_this_tick |= 2U;
+    if (sensors_read_this_tick == 15U) {
+        ++sensor_tick;
+        sensors_read_this_tick = 0;
+    }
+
+    return left == 1;
 }
 
 bool Right_Sensor_Interface(void)
 {
-    /* TODO 1.3: 우측 센서 주기적 읽기 -> True/False 변환 */
-    return false;
+    FILE *fp = fopen("sensors.txt", "r");
+    int front, left, right, dust;
+
+    for (unsigned long i = 0; i <= sensor_tick; ++i) {
+        if (fscanf(fp, "%d %d %d %d", &front, &left, &right, &dust) == EOF) {
+            fclose(fp);
+            puts("End of sensor data.");
+            exit(EXIT_SUCCESS);
+        }
+    }
+    fclose(fp);
+
+    sensors_read_this_tick |= 4U;
+    if (sensors_read_this_tick == 15U) {
+        ++sensor_tick;
+        sensors_read_this_tick = 0;
+    }
+
+    return right == 1;
 }
 
 bool Dust_Sensor_Interface(void)
 {
-    /* TODO 1.4: Tick마다 먼지 센서 raw 신호 읽기 -> Dust Existence */
-    return false;
+    FILE *fp = fopen("sensors.txt", "r");
+    int front, left, right, dust;
+
+    for (unsigned long i = 0; i <= sensor_tick; ++i) {
+        if (fscanf(fp, "%d %d %d %d", &front, &left, &right, &dust) == EOF) {
+            fclose(fp);
+            puts("End of sensor data.");
+            exit(EXIT_SUCCESS);
+        }
+    }
+    fclose(fp);
+
+    sensors_read_this_tick |= 8U;
+    if (sensors_read_this_tick == 15U) {
+        ++sensor_tick;
+        sensors_read_this_tick = 0;
+    }
+
+    return dust == 1;
 }
 
 void Motor_Interface(MotorCommand cmd)
 {
-    /* TODO 2.2: Motor Command -> 모터가 요구하는 Direction 신호로 변환 */
-    (void)cmd;
+    switch (cmd) {
+    case MOTOR_FORWARD:  puts("Motor: Forward");  break;
+    case MOTOR_BACKWARD: puts("Motor: Backward"); break;
+    case MOTOR_LEFT:     puts("Motor: Left");     break;
+    case MOTOR_RIGHT:    puts("Motor: Right");    break;
+    }
 }
 
 void Cleaner_Interface(CleanerCommand cmd)
 {
-    /* TODO 2.3: Cleaner Command(On/Off/Power-Up)대로 청소기 동작 */
-    (void)cmd;
+    switch (cmd) {
+    case CLEANER_OFF:      puts("Cleaner: Off");      break;
+    case CLEANER_ON:       puts("Cleaner: On");       break;
+    case CLEANER_POWER_UP: puts("Cleaner: Power-Up"); break;
+    }
 }
 
 /* ===== Afferent ===== */
