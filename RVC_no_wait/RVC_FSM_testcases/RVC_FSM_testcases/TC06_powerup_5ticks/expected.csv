@@ -1,0 +1,11 @@
+tick,time_ms,F,L,R,D,state_before,transition,state_after,expected_action
+1,200,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+2,400,0,0,0,1,MOVE_FORWARD,9,POWER_UP,Cleaner POWER UP
+3,600,0,0,0,0,POWER_UP,-,POWER_UP,"Keep POWER UP, move forward"
+4,800,0,0,0,0,POWER_UP,-,POWER_UP,"Keep POWER UP, move forward"
+5,1000,0,0,0,0,POWER_UP,-,POWER_UP,"Keep POWER UP, move forward"
+6,1200,0,0,0,0,POWER_UP,-,POWER_UP,"Keep POWER UP, move forward"
+7,1400,0,0,0,0,POWER_UP,10,MOVE_FORWARD,Cleaner ON
+8,1600,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+9,1800,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+10,2000,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward

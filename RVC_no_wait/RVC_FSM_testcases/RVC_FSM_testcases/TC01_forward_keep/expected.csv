@@ -1,0 +1,7 @@
+tick,time_ms,F,L,R,D,state_before,transition,state_after,expected_action
+1,200,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+2,400,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+3,600,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+4,800,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+5,1000,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+6,1200,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward

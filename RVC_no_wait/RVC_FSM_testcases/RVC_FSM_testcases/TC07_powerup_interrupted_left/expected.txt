@@ -1,0 +1,15 @@
+TC07_powerup_interrupted_left
+POWER_UP 도중 전방 장애물 -> 5 Tick 종료 전에 좌회전 (장애물 우선)
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F0 L0 R0 D1 |  MOVE_FORWARD --[9]--> POWER_UP
+T03 ( 600ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T04 ( 800ms) F1 L0 R1 D1 |      POWER_UP --[1]--> TURN_LEFT
+T05 (1000ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T06 (1200ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T07 (1400ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T08 (1600ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T09 (1800ms) F1 L0 R0 D0 |     TURN_LEFT --[7]--> MOVE_FORWARD
+T10 (2000ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T11 (2200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

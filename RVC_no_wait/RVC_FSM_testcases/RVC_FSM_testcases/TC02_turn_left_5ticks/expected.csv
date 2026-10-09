@@ -1,0 +1,10 @@
+tick,time_ms,F,L,R,D,state_before,transition,state_after,expected_action
+1,200,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+2,400,1,0,1,0,MOVE_FORWARD,1,TURN_LEFT,Forward disable; Cleaner OFF; Trigger LEFT
+3,600,1,0,0,0,TURN_LEFT,-,TURN_LEFT,Keep turning LEFT
+4,800,1,0,0,0,TURN_LEFT,-,TURN_LEFT,Keep turning LEFT
+5,1000,1,0,0,0,TURN_LEFT,-,TURN_LEFT,Keep turning LEFT
+6,1200,1,0,0,0,TURN_LEFT,-,TURN_LEFT,Keep turning LEFT
+7,1400,1,0,0,0,TURN_LEFT,7,MOVE_FORWARD,Move Forward enable; Cleaner ON
+8,1600,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward
+9,1800,0,0,0,0,MOVE_FORWARD,-,MOVE_FORWARD,Keep moving forward

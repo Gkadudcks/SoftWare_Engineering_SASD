@@ -1,0 +1,14 @@
+TC06_powerup_5ticks
+먼지 감지 -> POWER_UP, 먼지가 없어져도 5 Tick 유지 -> 전진
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F0 L0 R0 D1 |  MOVE_FORWARD --[9]--> POWER_UP
+T03 ( 600ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T04 ( 800ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T05 (1000ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T06 (1200ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T07 (1400ms) F0 L0 R0 D0 |      POWER_UP --[10]--> MOVE_FORWARD
+T08 (1600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T09 (1800ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T10 (2000ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

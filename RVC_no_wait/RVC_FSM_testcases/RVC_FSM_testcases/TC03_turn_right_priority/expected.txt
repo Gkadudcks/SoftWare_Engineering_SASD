@@ -1,0 +1,13 @@
+TC03_turn_right_priority
+F=1,L=1,R=0,D=1 -> 먼지보다 장애물 우선, 우회전 5 Tick
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F1 L1 R0 D1 |  MOVE_FORWARD --[2]--> TURN_RIGHT
+T03 ( 600ms) F1 L0 R0 D0 |    TURN_RIGHT --[-]--> TURN_RIGHT
+T04 ( 800ms) F1 L0 R0 D0 |    TURN_RIGHT --[-]--> TURN_RIGHT
+T05 (1000ms) F1 L0 R0 D0 |    TURN_RIGHT --[-]--> TURN_RIGHT
+T06 (1200ms) F1 L0 R0 D0 |    TURN_RIGHT --[-]--> TURN_RIGHT
+T07 (1400ms) F1 L0 R0 D0 |    TURN_RIGHT --[8]--> MOVE_FORWARD
+T08 (1600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T09 (1800ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

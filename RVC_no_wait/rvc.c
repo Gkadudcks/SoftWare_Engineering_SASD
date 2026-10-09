@@ -51,7 +51,7 @@ bool Front_Sensor_Interface(void)
 
     while (has_event && event_ms <= elapsed) {
         current_value = (value == 1);
-        printf("[Front event @ %llums] %d\n", event_ms, value);
+        printf("\n[EVENT @ %llums] FRONT=%d\n", event_ms, value);
 
         has_event = fscanf(fp, "%llu %d", &event_ms, &value) != EOF;
     }
@@ -133,19 +133,19 @@ bool Dust_Sensor_Interface(bool tick)
 void Motor_Interface(MotorCommand cmd)
 {
     switch (cmd) {
-    case MOTOR_FORWARD:  puts("[Motor] FORWARD");  break;
-    case MOTOR_BACKWARD: puts("[Motor] BACKWARD"); break;
-    case MOTOR_LEFT:     puts("[Motor] LEFT");     break;
-    case MOTOR_RIGHT:    puts("[Motor] RIGHT");    break;
+    case MOTOR_FORWARD:  puts("  ACTION  Motor=FORWARD");  break;
+    case MOTOR_BACKWARD: puts("  ACTION  Motor=BACKWARD"); break;
+    case MOTOR_LEFT:     puts("  ACTION  Motor=LEFT");     break;
+    case MOTOR_RIGHT:    puts("  ACTION  Motor=RIGHT");    break;
     }
 }
 
 void Cleaner_Interface(CleanerCommand cmd)
 {
     switch (cmd) {
-    case CLEANER_OFF:      puts("[Cleaner] OFF");      break;
-    case CLEANER_ON:       puts("[Cleaner] ON");       break;
-    case CLEANER_POWER_UP: puts("[Cleaner] POWER UP"); break;
+    case CLEANER_OFF:      puts("  ACTION  Cleaner=OFF");      break;
+    case CLEANER_ON:       puts("  ACTION  Cleaner=ON");       break;
+    case CLEANER_POWER_UP: puts("  ACTION  Cleaner=POWER_UP"); break;
     }
 }
 
@@ -174,6 +174,52 @@ static int tick_count;      /* Turn Left/Right, Power Up의 Tick * 5 카운터 (
 static uint64_t last_tick_ms; /* 마지막 Tick 시각 (실제 경과 시간 기준) */
 static bool front_stop_pending; /* Tick 사이에 감지한 전방 장애물을 다음 판단까지 기억 */
 
+/* Console-only FSM trace helpers: do not change transition logic. */
+static unsigned long trace_tick_number = 0;
+
+static const char *state_name(RvcState value)
+{
+    switch (value) {
+    case STATE_MOVE_FORWARD:  return "MOVE_FORWARD";
+    case STATE_TURN_LEFT:     return "TURN_LEFT";
+    case STATE_TURN_RIGHT:    return "TURN_RIGHT";
+    case STATE_STOP:          return "STOP";
+    case STATE_MOVE_BACKWARD: return "MOVE_BACKWARD";
+    case STATE_POWER_UP:      return "POWER_UP";
+    }
+    return "UNKNOWN";
+}
+
+/* Transition IDs match the team's FSM transition table. */
+static int transition_id(RvcState before, RvcState after)
+{
+    switch (before) {
+    case STATE_MOVE_FORWARD:
+    case STATE_POWER_UP:
+        if (after == STATE_TURN_LEFT)  return 1;
+        if (after == STATE_TURN_RIGHT) return 2;
+        if (after == STATE_STOP)       return 3;
+        if (before == STATE_MOVE_FORWARD && after == STATE_POWER_UP) return 9;
+        if (before == STATE_POWER_UP && after == STATE_MOVE_FORWARD) return 10;
+        break;
+    case STATE_STOP:
+        if (after == STATE_MOVE_BACKWARD) return 4;
+        break;
+    case STATE_MOVE_BACKWARD:
+        if (after == STATE_TURN_LEFT)  return 5;
+        if (after == STATE_TURN_RIGHT) return 6;
+        break;
+    case STATE_TURN_LEFT:
+        if (after == STATE_MOVE_FORWARD) return 7;
+        break;
+    case STATE_TURN_RIGHT:
+        if (after == STATE_MOVE_FORWARD) return 8;
+        break;
+    }
+    return 0; /* no state transition */
+}
+
+
 void Controller_Init(void)
 {
     /* 전이 0: 시간 기준을 설정하고 전진 및 일반 청소로 시작한다. */
@@ -182,6 +228,8 @@ void Controller_Init(void)
     front_stop_pending = false;
     start_ms = monotonic_ms();
     last_tick_ms = start_ms;
+    trace_tick_number = 0;
+    puts("[INIT] State=MOVE_FORWARD | Transition=T0");
     Move_Forward(SIG_ENABLE);
     Cleaner_Controller(CLEANER_ON);
 }
@@ -205,16 +253,29 @@ void Controller(void)
             Move_Forward(SIG_DISABLE);
             Cleaner_Controller(CLEANER_OFF);
             front_stop_pending = true;
+            printf("[ASYNC STOP @ %llums] Front obstacle detected; pending for next Tick\n",
+                   (unsigned long long)(now - start_ms));
         }
         return;
     }
 
     /* 좌우 센서가 갱신된 Tick에서 회피 방향을 결정한다.
        Tick 사이에 잠깐 감지된 장애물도 누락하지 않는다. */
+    bool latched_front = front_stop_pending;
+    bool front_at_tick = loc.front;
     if (front_stop_pending) {
         loc.front = true;
         front_stop_pending = false;
     }
+
+    RvcState before = state;
+    ++trace_tick_number;
+    printf("\n========== TICK %03lu | %llums ==========\n",
+           trace_tick_number, (unsigned long long)(last_tick_ms - start_ms));
+    printf("  INPUT   F=%d L=%d R=%d D=%d%s\n",
+           (int)loc.front, (int)loc.left, (int)loc.right, (int)dust,
+           latched_front && !front_at_tick ? "  (F held from earlier event)" : "");
+    printf("  BEFORE  %s\n", state_name(before));
 
     switch (state) {
     case STATE_MOVE_FORWARD:  state = Handle_Move_Forward(loc, dust);  break;
@@ -224,6 +285,13 @@ void Controller(void)
     case STATE_MOVE_BACKWARD: state = Handle_Move_Backward(loc, dust); break;
     case STATE_POWER_UP:      state = Handle_Power_Up(loc, dust);      break;
     }
+
+    int transition = transition_id(before, state);
+    if (transition != 0)
+        printf("  RESULT  [T%d] %s -> %s\n", transition,
+               state_name(before), state_name(state));
+    else
+        printf("  RESULT  [HOLD] %s\n", state_name(state));
 }
 
 /* ----- Controller 내부: 상태별 처리 ----- */
@@ -375,7 +443,7 @@ void Turn_Left(bool trigger)
         Motor_Interface(MOTOR_LEFT);
         turn_left_remaining--;
         /* 지금까지 돈 누적 각도 표시 (Tick당 TURN_DEG_PER_TICK도, 총 TURN_ANGLE_DEG도) */
-        printf("[Turn Left] %d / %d deg\n",
+        printf("  TURN    LEFT %d / %d deg\n",
                (TURN_TICKS - turn_left_remaining) * TURN_DEG_PER_TICK, TURN_ANGLE_DEG);
     }
 }
@@ -393,7 +461,7 @@ void Turn_Right(bool trigger)
         Motor_Interface(MOTOR_RIGHT);
         turn_right_remaining--;
         /* 지금까지 돈 누적 각도 표시 (Tick당 TURN_DEG_PER_TICK도, 총 TURN_ANGLE_DEG도) */
-        printf("[Turn Right] %d / %d deg\n",
+        printf("  TURN    RIGHT %d / %d deg\n",
                (TURN_TICKS - turn_right_remaining) * TURN_DEG_PER_TICK, TURN_ANGLE_DEG);
     }
 }

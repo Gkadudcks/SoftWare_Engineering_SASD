@@ -1,0 +1,17 @@
+TC08_powerup_stop_back
+POWER_UP 도중 사방 막힘 -> STOP -> BACKWARD -> 좌회전 -> 전진
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F0 L0 R0 D1 |  MOVE_FORWARD --[9]--> POWER_UP
+T03 ( 600ms) F0 L0 R0 D0 |      POWER_UP --[-]--> POWER_UP
+T04 ( 800ms) F1 L1 R1 D1 |      POWER_UP --[3]--> STOP
+T05 (1000ms) F1 L1 R1 D0 |          STOP --[4]--> MOVE_BACKWARD
+T06 (1200ms) F0 L1 R1 D0 | MOVE_BACKWARD --[-]--> MOVE_BACKWARD
+T07 (1400ms) F0 L0 R1 D0 | MOVE_BACKWARD --[5]--> TURN_LEFT
+T08 (1600ms) F0 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T09 (1800ms) F0 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T10 (2000ms) F0 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T11 (2200ms) F0 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T12 (2400ms) F0 L0 R0 D0 |     TURN_LEFT --[7]--> MOVE_FORWARD
+T13 (2600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

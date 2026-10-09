@@ -1,0 +1,10 @@
+TC01_forward_keep
+장애물과 먼지가 없을 때 계속 전진 (전이 없음)
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T03 ( 600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T04 ( 800ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T05 (1000ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T06 (1200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

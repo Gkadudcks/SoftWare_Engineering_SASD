@@ -1,0 +1,13 @@
+TC02_turn_left_5ticks
+전방 장애물 + 좌측 비어 있음 -> 좌회전 (5 Tick 후 전진)
+
+FSM state expected after each Tick (transition '-' means no transition):
+T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T02 ( 400ms) F1 L0 R1 D0 |  MOVE_FORWARD --[1]--> TURN_LEFT
+T03 ( 600ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T04 ( 800ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T05 (1000ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T06 (1200ms) F1 L0 R0 D0 |     TURN_LEFT --[-]--> TURN_LEFT
+T07 (1400ms) F1 L0 R0 D0 |     TURN_LEFT --[7]--> MOVE_FORWARD
+T08 (1600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
+T09 (1800ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
