@@ -1,0 +1,29 @@
+=== RVC FSM TEST: TC01_forward_clear ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.

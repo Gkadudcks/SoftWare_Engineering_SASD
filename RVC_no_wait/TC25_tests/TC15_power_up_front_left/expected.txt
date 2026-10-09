@@ -1,0 +1,79 @@
+=== RVC FSM TEST: TC15_power_up_front_left ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+[EVENT @ 700ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ Xms] Front obstacle detected; pending for next Tick
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] POWER_UP -> TURN_LEFT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.

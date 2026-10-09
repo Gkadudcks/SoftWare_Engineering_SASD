@@ -3,3 +3,6 @@
 output.txt
 *.exe
 rvc_test
+output_norm.txt
+all_outputs.txt
+*.obj

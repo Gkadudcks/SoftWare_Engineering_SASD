@@ -1,6 +1,0 @@
-[Motor] FORWARD
-[Cleaner] ON
-[Motor] FORWARD
-[Motor] FORWARD
-[Motor] FORWARD
-End of sensor data.

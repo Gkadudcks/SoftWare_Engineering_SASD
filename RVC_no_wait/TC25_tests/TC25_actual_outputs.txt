@@ -1,0 +1,1744 @@
+RVC TC01~TC25 실제 출력 (Windows에서 run_tests.bat 실행 결과, RVC_no_wait 현재 코드)
+F/L/R/D = 전방/좌/우 장애물, 먼지
+
+######################################################################
+# TC01  [PASS]  전진 중 0 0 0 0: 초기 On, 전진 유지
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC01_forward_clear ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC02  [PASS]  전진 중 0 0 1 0: 오른쪽이 막혀도 전진 유지
+#   sensors.txt (L R D, Tick마다): 010 | 010 | 010 | 010
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC02_right_blocked ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC03  [PASS]  전진 중 0 1 0 0: 왼쪽이 막혀도 전진 유지
+#   sensors.txt (L R D, Tick마다): 100 | 100 | 100 | 100
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC03_left_blocked ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC04  [PASS]  전진 중 0 1 1 0: 좌우가 막혀도 앞이 비면 전진 유지
+#   sensors.txt (L R D, Tick마다): 110 | 110 | 110 | 110
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC04_both_sides_blocked ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC05  [PASS]  전진 중 1 0 0 0: 전진 중지·Off -> 좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0
+######################################################################
+=== RVC FSM TEST: TC05_front_turn_left ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC06  [PASS]  전진 중 1 0 1 0: 전진 중지·Off -> 좌회전
+#   sensors.txt (L R D, Tick마다): 010 | 010 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0
+######################################################################
+=== RVC FSM TEST: TC06_front_right_blocked_left ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC07  [PASS]  전진 중 1 1 0 0: 전진 중지·Off -> 우회전
+#   sensors.txt (L R D, Tick마다): 100 | 100 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0
+######################################################################
+=== RVC FSM TEST: TC07_front_left_blocked_right ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 313ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T2] MOVE_FORWARD -> TURN_RIGHT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC08  [PASS]  전진 중 1 1 1 0 유지: 정지·Off -> 다음 Tick 후진 -> 후진 유지
+#   sensors.txt (L R D, Tick마다): 000 | 110 | 110 | 110 | 110 | 110
+#   front_events.txt: 300ms F=1, 1100ms F=0
+######################################################################
+=== RVC FSM TEST: TC08_all_blocked_back_keep ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  RESULT  [T3] MOVE_FORWARD -> STOP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=BACKWARD
+  RESULT  [HOLD] MOVE_BACKWARD
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=BACKWARD
+  RESULT  [HOLD] MOVE_BACKWARD
+
+[EVENT @ 1100ms] FRONT=0
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=BACKWARD
+  RESULT  [HOLD] MOVE_BACKWARD
+End of sensor data.
+
+######################################################################
+# TC09  [PASS]  후진 진입 후 1 0 0 0: 후진 중지 -> 좌회전 우선
+#   sensors.txt (L R D, Tick마다): 000 | 110 | 110 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC09_back_both_open_left ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  RESULT  [T3] MOVE_FORWARD -> STOP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T5] MOVE_BACKWARD -> TURN_LEFT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC10  [PASS]  후진 진입 후 1 0 1 0: 후진 중지 -> 좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 110 | 110 | 010 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC10_back_left_open ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  RESULT  [T3] MOVE_FORWARD -> STOP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=0 R=1 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T5] MOVE_BACKWARD -> TURN_LEFT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC11  [PASS]  후진 진입 후 1 1 0 0: 후진 중지 -> 우회전
+#   sensors.txt (L R D, Tick마다): 000 | 110 | 110 | 100 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC11_back_right_open ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 313ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  RESULT  [T3] MOVE_FORWARD -> STOP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T6] MOVE_BACKWARD -> TURN_RIGHT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC12  [PASS]  전진 중 0 0 0 1 유지: Power-Up 진입, 전진 유지 -> 5 Tick 후 On
+#   sensors.txt (L R D, Tick마다): 001 | 001 | 001 | 001 | 001 | 001 | 000 | 000
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC12_dust_held_power_up ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T10] POWER_UP -> MOVE_FORWARD
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC13  [PASS]  Power-Up 진입 후 0 0 0 0: 먼지가 사라져도 5 Tick 유지 -> On
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC13_dust_gone_keep_power_up ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T10] POWER_UP -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC14  [PASS]  전진 중 1 0 0 1: 먼지보다 장애물 우선 -> Off·좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0
+######################################################################
+=== RVC FSM TEST: TC14_front_and_dust ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 313ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC15  [PASS]  Power-Up 진입 후 1 0 0 0: 강화 중단·Off -> 좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 700ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC15_power_up_front_left ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+[EVENT @ 700ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 703ms] Front obstacle detected; pending for next Tick
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] POWER_UP -> TURN_LEFT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC16  [PASS]  Power-Up 진입 후 1 1 0 0: 강화 중단·Off -> 우회전
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 100 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 700ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC16_power_up_front_right ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+[EVENT @ 700ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 703ms] Front obstacle detected; pending for next Tick
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Cleaner=OFF
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T2] POWER_UP -> TURN_RIGHT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC17  [PASS]  Power-Up 진입 후 1 1 1 0: 강화 중단·Off -> 정지 -> 다음 Tick 후진
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 110 | 110 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 700ms F=1, 900ms F=0
+######################################################################
+=== RVC FSM TEST: TC17_power_up_all_blocked ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+[EVENT @ 700ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 703ms] Front obstacle detected; pending for next Tick
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  POWER_UP
+  ACTION  Cleaner=OFF
+  RESULT  [T3] POWER_UP -> STOP
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T5] MOVE_BACKWARD -> TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 011 | 2200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 012 | 2400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC18  [PASS]  좌회전 완료 후 우회전 조건: 카운터 초기화, 다시 5 Tick 회전 -> 전진·On
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000 | 100 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0, 1700ms F=1, 1900ms F=0
+######################################################################
+=== RVC FSM TEST: TC18_left_then_right ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 313ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 1700ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 1703ms] Front obstacle detected; pending for next Tick
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T2] MOVE_FORWARD -> TURN_RIGHT
+
+[EVENT @ 1900ms] FRONT=0
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 011 | 2200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 012 | 2400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 013 | 2600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 014 | 2800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 015 | 3000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC19  [PASS]  전진 중 (Tick 사이) 1 0 0 0: 즉시 전진 중지·Off -> 다음 Tick 좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 500ms F=1, 700ms F=0
+######################################################################
+=== RVC FSM TEST: TC19_async_stop_between_ticks ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 500ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 484ms] Front obstacle detected; pending for next Tick
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 700ms] FRONT=0
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC20  [PASS]  전진 중 (Tick 사이 60ms 신호): 짧은 신호도 다음 Tick 좌회전
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 360ms F=0
+######################################################################
+=== RVC FSM TEST: TC20_short_front_pulse ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 313ms] Front obstacle detected; pending for next Tick
+
+[EVENT @ 360ms] FRONT=0
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=0  (F held from earlier event)
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC21  [PASS]  좌회전 중 1 1 1 1: 회전 중 입력 무시, 5 Tick 회전 완료
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 111 | 111 | 111 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0, 700ms F=1, 1100ms F=0
+######################################################################
+=== RVC FSM TEST: TC21_ignore_while_turning ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 297ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=1 R=1 D=1
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+[EVENT @ 700ms] FRONT=1
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=1 D=1
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=1 L=1 R=1 D=1
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+[EVENT @ 1100ms] FRONT=0
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC22  [PASS]  회전 Tick마다 누적 각도 18 -> 36 -> 54 -> 72 -> 90도
+#   sensors.txt (L R D, Tick마다): 100 | 100 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1, 500ms F=0
+######################################################################
+=== RVC FSM TEST: TC22_turn_angle_output ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 297ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T2] MOVE_FORWARD -> TURN_RIGHT
+
+[EVENT @ 500ms] FRONT=0
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC23  [PASS]  Power-Up 진입 후 0 0 0 1 재감지: 카운트 초기화 없이 원래 시점에 On
+#   sensors.txt (L R D, Tick마다): 000 | 001 | 000 | 001 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC23_dust_again_no_reset ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T10] POWER_UP -> MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+######################################################################
+# TC24  [PASS]  전진 중 전방 입력 끝(1 유지): 마지막 값 유지 -> 회전 -> 전진 -> 즉시 정지·회피 반복
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000 | 000
+#   front_events.txt: 300ms F=1
+######################################################################
+=== RVC FSM TEST: TC24_front_events_eof ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 312ms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 72 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 90 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T7] TURN_LEFT -> MOVE_FORWARD
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ 1406ms] Front obstacle detected; pending for next Tick
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  ACTION  Motor=LEFT
+  TURN    LEFT 18 / 90 deg
+  RESULT  [T1] MOVE_FORWARD -> TURN_LEFT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 36 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=1 L=0 R=0 D=0
+  BEFORE  TURN_LEFT
+  ACTION  Motor=LEFT
+  TURN    LEFT 54 / 90 deg
+  RESULT  [HOLD] TURN_LEFT
+End of sensor data.
+
+######################################################################
+# TC25  [PASS]  전진 중 센서 입력 끝: End of sensor data. 출력 후 정상 종료
+#   sensors.txt (L R D, Tick마다): 000 | 000 | 000
+#   front_events.txt: 없음
+######################################################################
+=== RVC FSM TEST: TC25_sensor_eof ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
+
+======================================================================
+PASS: 25  FAIL: 0

@@ -1,0 +1,77 @@
+=== RVC FSM TEST: TC11_back_right_open ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+[EVENT @ 300ms] FRONT=1
+  ACTION  Cleaner=OFF
+[ASYNC STOP @ Xms] Front obstacle detected; pending for next Tick
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Cleaner=OFF
+  RESULT  [T3] MOVE_FORWARD -> STOP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=1 L=1 R=1 D=0
+  BEFORE  STOP
+  ACTION  Motor=BACKWARD
+  RESULT  [T4] STOP -> MOVE_BACKWARD
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=1 L=1 R=0 D=0
+  BEFORE  MOVE_BACKWARD
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 18 / 90 deg
+  RESULT  [T6] MOVE_BACKWARD -> TURN_RIGHT
+
+[EVENT @ 900ms] FRONT=0
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 36 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 54 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 72 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=RIGHT
+  TURN    RIGHT 90 / 90 deg
+  RESULT  [HOLD] TURN_RIGHT
+
+========== TICK 009 | 1800ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  TURN_RIGHT
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T8] TURN_RIGHT -> MOVE_FORWARD
+
+========== TICK 010 | 2000ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.

@@ -1,9 +1,0 @@
-TC09_front_pulse_between_ticks
-전방 센서가 두 Tick 사이에서 1->0 변화: FSM은 Tick 순간 0으로 보며 전진 유지
-
-FSM state expected after each Tick (transition '-' means no transition):
-T01 ( 200ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
-T02 ( 400ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
-T03 ( 600ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
-T04 ( 800ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD
-T05 (1000ms) F0 L0 R0 D0 |  MOVE_FORWARD --[-]--> MOVE_FORWARD

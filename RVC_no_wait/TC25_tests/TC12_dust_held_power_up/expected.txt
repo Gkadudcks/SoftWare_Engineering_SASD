@@ -1,0 +1,55 @@
+=== RVC FSM TEST: TC12_dust_held_power_up ===
+[INIT] State=MOVE_FORWARD | Transition=T0
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+
+========== TICK 001 | 200ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=POWER_UP
+  RESULT  [T9] MOVE_FORWARD -> POWER_UP
+
+========== TICK 002 | 400ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 003 | 600ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 004 | 800ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 005 | 1000ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] POWER_UP
+
+========== TICK 006 | 1200ms ==========
+  INPUT   F=0 L=0 R=0 D=1
+  BEFORE  POWER_UP
+  ACTION  Motor=FORWARD
+  ACTION  Cleaner=ON
+  RESULT  [T10] POWER_UP -> MOVE_FORWARD
+
+========== TICK 007 | 1400ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+
+========== TICK 008 | 1600ms ==========
+  INPUT   F=0 L=0 R=0 D=0
+  BEFORE  MOVE_FORWARD
+  ACTION  Motor=FORWARD
+  RESULT  [HOLD] MOVE_FORWARD
+End of sensor data.
