@@ -124,27 +124,32 @@ void Cleaner_Interface(CleanerCommand cmd)
 
 ObstacleLocation Determine_Obstacle_Location(void)
 {
-    ObstacleLocation loc = { false, false, false };
-    /* TODO 1.5: Front/Left/Right Sensor Interface 호출 -> Obstacle Location 구성 */
+    /* 1.5: 세 방향 센서 값을 장애물 위치로 구성한다. */
+    ObstacleLocation loc;
+    loc.front = Front_Sensor_Interface();
+    loc.left = Left_Sensor_Interface();
+    loc.right = Right_Sensor_Interface();
     return loc;
 }
 
 bool Determine_Dust_Existence(void)
 {
-    /* TODO 1.6: Dust Sensor Interface 호출 -> Controller로 전달 */
-    return false;
+    /* 1.6: 먼지 센서 값을 Controller로 전달한다. */
+    return Dust_Sensor_Interface();
 }
 
 /* ===== Transform Center ===== */
 
 static RvcState state;      /* 현재 FSM 상태 (Tick 사이에도 유지) */
-static int tick_count;      /* Turn Left/Right, Power Up의 Tick * 5 카운터 (상태 진입 시 0으로) */
+static int tick_count;      /* 상태 진입 후 경과한 Tick 수 (진입 시 0) */
 
 void Controller_Init(void)
 {
-    /* TODO 전이 0: Enable "Move Forward", Cleaner command (On) */
+    /* 전이 0: 전진 및 일반 청소로 시작한다. */
     state = STATE_MOVE_FORWARD;
     tick_count = 0;
+    Move_Forward(SIG_ENABLE);
+    Cleaner_Controller(CLEANER_ON);
 }
 
 void Controller(void)
@@ -166,57 +171,101 @@ void Controller(void)
 
 RvcState Handle_Move_Forward(ObstacleLocation loc, bool dust)
 {
-    /* TODO 매 Tick 장애물/먼지 판단:
-            전이 1: [F && !L]       -> Disable Forward, Cleaner Off, Trigger Turn Left  -> TURN_LEFT
-            전이 2: [F && L && !R]  -> Disable Forward, Cleaner Off, Trigger Turn Right -> TURN_RIGHT
-            전이 3: [F && L && R]   -> Disable Forward, Cleaner Off                     -> STOP
-            전이 9: [D && !F]       -> Cleaner Power Up                                 -> POWER_UP
-            전이 없음                -> Move_Forward(SIG_ENABLE) 유지 (계속 전진)         -> MOVE_FORWARD */
-    (void)loc; (void)dust;
+    /* 전이 1~3: 장애물 회피가 먼지 처리보다 우선, 좌회전이 우선이다. */
+    if (loc.front) {
+        Move_Forward(SIG_DISABLE);
+        Cleaner_Controller(CLEANER_OFF);
+        tick_count = 0;
+        if (!loc.left) {
+            Turn_Left(true);
+            return STATE_TURN_LEFT;
+        }
+        if (!loc.right) {
+            Turn_Right(true);
+            return STATE_TURN_RIGHT;
+        }
+        return STATE_STOP;
+    }
+
+    Move_Forward(SIG_ENABLE);
+    if (dust) {                       /* 전이 9: 전진하면서 흡입 강화 */
+        tick_count = 0;
+        Cleaner_Controller(CLEANER_POWER_UP);
+        return STATE_POWER_UP;
+    }
     return STATE_MOVE_FORWARD;
 }
 
 RvcState Handle_Turn_Left(ObstacleLocation loc, bool dust)
 {
-    /* TODO Turn_Left(false)로 Tick 전달, tick_count 증가
-            전이 7: Tick * 5 -> Enable Forward, Cleaner On -> MOVE_FORWARD */
     (void)loc; (void)dust;
+    ++tick_count;
+    /* Trigger Tick에 이미 첫 회전 명령이 나갔다.
+       이후 4 Tick은 회전하고, 5번째 경과 Tick에는 전진한다. */
+    if (tick_count >= TURN_TICKS) {     /* 전이 7 */
+        tick_count = 0;
+        Move_Forward(SIG_ENABLE);
+        Cleaner_Controller(CLEANER_ON);
+        return STATE_MOVE_FORWARD;
+    }
+    Turn_Left(false);
     return STATE_TURN_LEFT;
 }
 
 RvcState Handle_Turn_Right(ObstacleLocation loc, bool dust)
 {
-    /* TODO Turn_Right(false)로 Tick 전달, tick_count 증가
-            전이 8: Tick * 5 -> Enable Forward, Cleaner On -> MOVE_FORWARD */
     (void)loc; (void)dust;
+    ++tick_count;
+    if (tick_count >= TURN_TICKS) {     /* 전이 8 */
+        tick_count = 0;
+        Move_Forward(SIG_ENABLE);
+        Cleaner_Controller(CLEANER_ON);
+        return STATE_MOVE_FORWARD;
+    }
+    Turn_Right(false);
     return STATE_TURN_RIGHT;
 }
 
 RvcState Handle_Stop(ObstacleLocation loc, bool dust)
 {
-    /* TODO 전이 4: Tick -> Enable Move Backward -> MOVE_BACKWARD */
+    /* 전이 4: 정지 상태에 진입한 다음 Tick부터 후진한다. */
     (void)loc; (void)dust;
-    return STATE_STOP;
+    Move_Backward(SIG_ENABLE);
+    return STATE_MOVE_BACKWARD;
 }
 
 RvcState Handle_Move_Backward(ObstacleLocation loc, bool dust)
 {
-    /* TODO 매 Tick 장애물 판단:
-            전이 5: [!L]       -> Disable Backward, Trigger Turn Left  -> TURN_LEFT
-            전이 6: [L && !R]  -> Disable Backward, Trigger Turn Right -> TURN_RIGHT
-            전이 없음 [L && R]  -> Move_Backward(SIG_ENABLE) 유지 (계속 후진) -> MOVE_BACKWARD */
-    (void)loc; (void)dust;
+    (void)dust;
+    if (!loc.left) {                  /* 전이 5: 왼쪽이 비면 좌회전 */
+        Move_Backward(SIG_DISABLE);
+        tick_count = 0;
+        Turn_Left(true);
+        return STATE_TURN_LEFT;
+    }
+    if (!loc.right) {                 /* 전이 6: 왼쪽이 막히면 오른쪽 확인 */
+        Move_Backward(SIG_DISABLE);
+        tick_count = 0;
+        Turn_Right(true);
+        return STATE_TURN_RIGHT;
+    }
+    Move_Backward(SIG_ENABLE);
     return STATE_MOVE_BACKWARD;
 }
 
 RvcState Handle_Power_Up(ObstacleLocation loc, bool dust)
 {
-    /* TODO 전이 1: [F && !L]       -> Disable Forward, Cleaner Off, Trigger Turn Left  -> TURN_LEFT
-            전이 2: [F && L && !R]  -> Disable Forward, Cleaner Off, Trigger Turn Right -> TURN_RIGHT
-            전이 3: [F && L && R]   -> Disable Forward, Cleaner Off                     -> STOP
-            전이 10: Tick * 5 (tick_count) -> Cleaner On                              -> MOVE_FORWARD
-            전이 없음                -> Move_Forward(SIG_ENABLE) 유지 (흡입 강화하며 전진) -> POWER_UP */
-    (void)loc; (void)dust;
+    (void)dust;                       /* 강화 중 먼지 재감지는 타이머를 리셋하지 않는다. */
+    if (loc.front)                    /* 전이 1~3: 전진 상태와 같은 장애물 회피 */
+        return Handle_Move_Forward(loc, false);
+
+    Move_Forward(SIG_ENABLE);
+    ++tick_count;
+    if (tick_count >= TURN_TICKS) {    /* 전이 10: 5 Tick 후 일반 흡입 복귀 */
+        tick_count = 0;
+        Cleaner_Controller(CLEANER_ON);
+        return STATE_MOVE_FORWARD;
+    }
     return STATE_POWER_UP;
 }
 
