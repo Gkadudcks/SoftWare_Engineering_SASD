@@ -1,2 +1,5 @@
-"~$*" 
+~$*
 .vs/
+output.txt
+*.exe
+rvc_test
